@@ -23,3 +23,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Blue color theme inspired by the original Splendo app
 - Capacitor Android platform configured
 - Zustand store with localStorage persistence
+- PWA support — installable on mobile and desktop, works offline
+- Docker deployment — multi-stage Dockerfile with nginx for production serving

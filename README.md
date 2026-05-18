@@ -1,6 +1,6 @@
 # TODO List
 
-A simple TODO list mobile app built with React, Vite, and Capacitor. Inspired by [Splendo](https://play.google.com/store/apps/details?id=com.splendapps.splendo&hl=en-US).
+A simple TODO list PWA built with React, Vite, and TypeScript. Inspired by [Splendo](https://play.google.com/store/apps/details?id=com.splendapps.splendo&hl=en-US). Installable on mobile and desktop, works offline.
 
 ## Development
 
@@ -9,7 +9,16 @@ npm install
 npm run dev
 ```
 
-## Build & sync to Android
+## Docker deployment
+
+```bash
+docker build -t todolist .
+docker run -d -p 8080:80 todolist
+```
+
+The app will be available at `http://localhost:8080`.
+
+## Build & sync to Android (Capacitor)
 
 ```bash
 npm run build
@@ -29,4 +38,5 @@ npx cap open android
   - [ ] Configure whether quick-add creates tasks for today or without a date
   - [ ] Configure how long before a task's due time to show a notification
   - [ ] Configure when to display the daily task summary notification
-- [ ] **Export / Import** — export and import tasks to/from a file (via menu)
+- [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
+- [ ] **JSON storage on device** — persist data to a local JSON file instead of (or alongside) localStorage
