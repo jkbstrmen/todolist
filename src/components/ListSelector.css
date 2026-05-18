@@ -1,0 +1,160 @@
+.list-selector {
+  position: relative;
+}
+
+.list-selector-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.list-selector-arrow {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.list-selector-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+}
+
+.list-selector-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  overflow: hidden;
+}
+
+.list-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.list-option.active {
+  background: #e3f2fd;
+}
+
+.list-option-name {
+  flex: 1;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  font-size: 15px;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+.list-option-actions {
+  display: flex;
+  padding-right: 8px;
+  gap: 2px;
+}
+
+.list-action-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.list-action-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.list-action-btn.delete:hover {
+  color: #ef4444;
+}
+
+.list-rename-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 2px solid #2196F3;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.list-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 4px 0;
+}
+
+.completed-option {
+  border-bottom: none;
+}
+
+.completed-option .list-option-name {
+  color: #6b7280;
+}
+
+.completed-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #e5e7eb;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.list-create {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  gap: 8px;
+}
+
+.list-create-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.list-create-input:focus {
+  border-color: #2196F3;
+}
+
+.list-create-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #2196F3;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-create-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -6,7 +6,7 @@ interface AddTaskModalProps {
   isOpen: boolean;
   editingTask: Task | null;
   onClose: () => void;
-  onSave: (title: string, dueDate: string | null) => void;
+  onSave: (title: string, description: string, dueDate: string | null, dueTime: string | null) => void;
 }
 
 export function AddTaskModal({
@@ -16,25 +16,30 @@ export function AddTaskModal({
   onSave,
 }: AddTaskModalProps) {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [dueTime, setDueTime] = useState('');
 
   useEffect(() => {
     if (editingTask) {
       setTitle(editingTask.title);
+      setDescription(editingTask.description ?? '');
       setDueDate(editingTask.dueDate ?? '');
+      setDueTime(editingTask.dueTime ?? '');
     } else {
       setTitle('');
+      setDescription('');
       setDueDate('');
+      setDueTime('');
     }
   }, [editingTask, isOpen]);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSave = () => {
     const trimmed = title.trim();
     if (!trimmed) return;
-    onSave(trimmed, dueDate || null);
+    onSave(trimmed, description.trim(), dueDate || null, dueTime || null);
     onClose();
   };
 
@@ -42,30 +47,48 @@ export function AddTaskModal({
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>{editingTask ? 'Edit Task' : 'New Task'}</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            className="modal-input"
-            placeholder="What needs to be done?"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            autoFocus
-          />
+        <input
+          type="text"
+          className="modal-input"
+          placeholder="Task title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          autoFocus
+        />
+        <textarea
+          className="modal-input modal-textarea"
+          placeholder="Description (optional)"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={3}
+        />
+        <div className="modal-datetime-row">
           <input
             type="date"
             className="modal-input"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
           />
-          <div className="modal-actions">
-            <button type="button" className="btn-cancel" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className="btn-save" disabled={!title.trim()}>
-              {editingTask ? 'Save' : 'Add'}
-            </button>
-          </div>
-        </form>
+          <input
+            type="time"
+            className="modal-input"
+            value={dueTime}
+            onChange={(e) => setDueTime(e.target.value)}
+          />
+        </div>
+        <div className="modal-actions">
+          <button type="button" className="btn-cancel" onClick={onClose}>
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="btn-save"
+            disabled={!title.trim()}
+            onClick={handleSave}
+          >
+            {editingTask ? 'Save' : 'Add'}
+          </button>
+        </div>
       </div>
     </div>
   );

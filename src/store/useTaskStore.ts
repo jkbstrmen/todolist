@@ -1,28 +1,66 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Task } from '../models/Task';
+import type { Task, TaskList } from '../models/Task';
+
+const DEFAULT_LIST: TaskList = { id: 'default', name: 'My Tasks' };
+export const COMPLETED_LIST_ID = '__completed__';
 
 interface TaskState {
+  lists: TaskList[];
+  activeListId: string;
   tasks: Task[];
-  addTask: (title: string, dueDate: string | null) => void;
+  addList: (name: string) => string;
+  renameList: (id: string, name: string) => void;
+  deleteList: (id: string) => void;
+  setActiveList: (id: string) => void;
+  addTask: (title: string, description: string, dueDate: string | null, dueTime: string | null) => void;
   toggleTask: (id: string) => void;
-  editTask: (id: string, title: string, dueDate: string | null) => void;
+  editTask: (id: string, title: string, description: string, dueDate: string | null, dueTime: string | null) => void;
   deleteTask: (id: string) => void;
 }
 
 export const useTaskStore = create<TaskState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
+      lists: [DEFAULT_LIST],
+      activeListId: DEFAULT_LIST.id,
       tasks: [],
-      addTask: (title, dueDate) =>
+      addList: (name) => {
+        const id = crypto.randomUUID();
+        set((state) => ({
+          lists: [...state.lists, { id, name }],
+          activeListId: id,
+        }));
+        return id;
+      },
+      renameList: (id, name) =>
+        set((state) => ({
+          lists: state.lists.map((l) => (l.id === id ? { ...l, name } : l)),
+        })),
+      deleteList: (id) => {
+        const state = get();
+        if (state.lists.length <= 1) return;
+        const remaining = state.lists.filter((l) => l.id !== id);
+        set({
+          lists: remaining,
+          tasks: state.tasks.filter((t) => t.listId !== id),
+          activeListId:
+            state.activeListId === id ? remaining[0].id : state.activeListId,
+        });
+      },
+      setActiveList: (id) => set({ activeListId: id }),
+      addTask: (title, description, dueDate, dueTime) =>
         set((state) => ({
           tasks: [
             ...state.tasks,
             {
               id: crypto.randomUUID(),
               title,
+              description,
               completed: false,
               dueDate,
+              dueTime,
+              listId: state.activeListId,
               createdAt: new Date().toISOString(),
             },
           ],
@@ -33,10 +71,10 @@ export const useTaskStore = create<TaskState>()(
             t.id === id ? { ...t, completed: !t.completed } : t
           ),
         })),
-      editTask: (id, title, dueDate) =>
+      editTask: (id, title, description, dueDate, dueTime) =>
         set((state) => ({
           tasks: state.tasks.map((t) =>
-            t.id === id ? { ...t, title, dueDate } : t
+            t.id === id ? { ...t, title, description, dueDate, dueTime } : t
           ),
         })),
       deleteTask: (id) =>
