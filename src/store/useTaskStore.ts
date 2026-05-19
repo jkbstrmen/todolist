@@ -1,6 +1,20 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { get as idbGet, set as idbSet, del as idbDel } from 'idb-keyval';
 import type { Task, TaskList } from '../models/Task';
+
+const idbStorage = {
+  getItem: async (name: string) => {
+    const value = await idbGet<string>(name);
+    return value ?? null;
+  },
+  setItem: async (name: string, value: string) => {
+    await idbSet(name, value);
+  },
+  removeItem: async (name: string) => {
+    await idbDel(name);
+  },
+};
 
 const DEFAULT_LIST: TaskList = { id: 'default', name: 'My Tasks' };
 export const COMPLETED_LIST_ID = '__completed__';
@@ -82,6 +96,6 @@ export const useTaskStore = create<TaskState>()(
           tasks: state.tasks.filter((t) => t.id !== id),
         })),
     }),
-    { name: 'todo-storage' }
+    { name: 'todo-storage', storage: createJSONStorage(() => idbStorage) }
   )
 );

@@ -29,7 +29,7 @@ npx cap open android
 ## Planned Features
 
 - [ ] **Color labels for lists** — assign colors to task lists for visual distinction
-- [ ] **Dark blue theme** — app-wide dark blue color scheme
+- [x] **Dark blue theme** — app-wide dark blue color scheme
 - [ ] **Notifications**
   - [ ] Notify at the set time for tasks with a due time
   - [ ] Notify at 7:00 AM for all-day tasks
@@ -41,3 +41,4 @@ npx cap open android
 - [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
 - [ ] **Undo on complete** — show a brief undo snackbar after marking a task as completed
 - [ ] **JSON storage on device** — persist data to a local JSON file instead of (or alongside) localStorage
+- [ ] Storage - IndexedDB
