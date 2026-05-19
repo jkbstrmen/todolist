@@ -39,4 +39,5 @@ npx cap open android
   - [ ] Configure how long before a task's due time to show a notification
   - [ ] Configure when to display the daily task summary notification
 - [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
+- [ ] **Undo on complete** — show a brief undo snackbar after marking a task as completed
 - [ ] **JSON storage on device** — persist data to a local JSON file instead of (or alongside) localStorage

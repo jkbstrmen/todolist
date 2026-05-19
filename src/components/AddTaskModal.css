@@ -1,7 +1,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -10,7 +10,7 @@
 }
 
 .modal-content {
-  background: #fff;
+  background: #273549;
   border-radius: 16px 16px 0 0;
   padding: 24px;
   width: 100%;
@@ -21,23 +21,29 @@
 .modal-content h2 {
   margin: 0 0 16px;
   font-size: 18px;
-  color: #1f2937;
+  color: #e2e8f0;
 }
 
 .modal-input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #3b4a5e;
   border-radius: 8px;
   font-size: 16px;
   margin-bottom: 12px;
   box-sizing: border-box;
   outline: none;
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+.modal-input::placeholder {
+  color: #64748b;
 }
 
 .modal-input:focus {
-  border-color: #2196F3;
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
 .modal-textarea {
@@ -76,12 +82,12 @@
 }
 
 .btn-cancel {
-  background: #f3f4f6;
-  color: #374151;
+  background: #3b4a5e;
+  color: #e2e8f0;
 }
 
 .btn-save {
-  background: #2196F3;
+  background: #3b82f6;
   color: #fff;
 }
 

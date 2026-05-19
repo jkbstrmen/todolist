@@ -3,8 +3,8 @@
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  background: #fff;
-  border-top: 1px solid #e5e7eb;
+  background: #273549;
+  border-top: 1px solid #3b4a5e;
   position: sticky;
   bottom: 0;
   z-index: 10;
@@ -13,16 +13,20 @@
 .quick-add-input {
   flex: 1;
   padding: 10px 14px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #3b4a5e;
   border-radius: 20px;
   font-size: 15px;
   outline: none;
-  background: #f9fafb;
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+.quick-add-input::placeholder {
+  color: #64748b;
 }
 
 .quick-add-input:focus {
-  border-color: #2196F3;
-  background: #fff;
+  border-color: #3b82f6;
 }
 
 .quick-add-btn {
@@ -30,7 +34,7 @@
   height: 38px;
   border-radius: 50%;
   border: none;
-  background: #2196F3;
+  background: #3b82f6;
   color: #fff;
   font-size: 18px;
   cursor: pointer;
