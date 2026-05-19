@@ -1,0 +1,82 @@
+.settings-pane {
+  padding: 8px 16px 32px;
+}
+
+.settings-group {
+  margin-bottom: 24px;
+}
+
+.settings-group-title {
+  margin: 0;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  background: #273549;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.settings-item-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-item-text label {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+.settings-item-text p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.3;
+}
+
+.settings-select,
+.settings-number,
+.settings-time {
+  padding: 8px 12px;
+  border: 1px solid #3b4a5e;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #1e293b;
+  color: #e2e8f0;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.settings-select:focus,
+.settings-number:focus,
+.settings-time:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.settings-select {
+  min-width: 130px;
+  cursor: pointer;
+}
+
+.settings-number {
+  width: 80px;
+  text-align: center;
+}
+
+.settings-time {
+  width: 110px;
+}

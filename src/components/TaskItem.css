@@ -87,6 +87,26 @@
   font-weight: 600;
 }
 
+.task-item.removed .task-title {
+  color: #94a3b8;
+}
+
+.task-restore {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #22c55e;
+  cursor: pointer;
+  padding: 0;
+}
+
 .task-delete {
   background: none;
   border: none;

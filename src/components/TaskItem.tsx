@@ -4,6 +4,7 @@ import './TaskItem.css';
 interface TaskItemProps {
   task: Task;
   subtitle?: string;
+  isRemovedView?: boolean;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (task: Task) => void;
@@ -31,20 +32,21 @@ function formatTime(timeStr: string): string {
 export function TaskItem({
   task,
   subtitle,
+  isRemovedView,
   onToggle,
   onDelete,
   onEdit,
 }: TaskItemProps) {
   return (
-    <div className={`task-item ${task.completed ? 'completed' : ''}`}>
+    <div className={`task-item ${task.completed ? 'completed' : ''} ${isRemovedView ? 'removed' : ''}`}>
       <button
-        className="task-checkbox"
+        className={isRemovedView ? 'task-restore' : 'task-checkbox'}
         onClick={() => onToggle(task.id)}
-        aria-label={task.completed ? 'Reopen task' : 'Mark complete'}
+        aria-label={isRemovedView ? 'Restore task' : task.completed ? 'Reopen task' : 'Mark complete'}
       >
-        {task.completed ? '✓' : ''}
+        {isRemovedView ? '↩' : task.completed ? '✓' : ''}
       </button>
-      <div className="task-content" onClick={() => onEdit(task)}>
+      <div className="task-content" onClick={isRemovedView ? undefined : () => onEdit(task)}>
         <span className="task-title">{task.title}</span>
         {task.description && (
           <span className="task-description">{task.description}</span>
@@ -62,7 +64,7 @@ export function TaskItem({
       <button
         className="task-delete"
         onClick={() => onDelete(task.id)}
-        aria-label="Delete task"
+        aria-label={isRemovedView ? 'Delete permanently' : 'Delete task'}
       >
         ×
       </button>

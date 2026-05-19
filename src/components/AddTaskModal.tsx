@@ -68,12 +68,14 @@ export function AddTaskModal({
             className="modal-input"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
+            onFocus={(e) => e.target.showPicker?.()}
           />
           <input
             type="time"
             className="modal-input"
             value={dueTime}
             onChange={(e) => setDueTime(e.target.value)}
+            onFocus={(e) => e.target.showPicker?.()}
           />
         </div>
         <div className="modal-actions">

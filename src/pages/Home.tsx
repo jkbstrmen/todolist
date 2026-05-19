@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
-import { useTaskStore, COMPLETED_LIST_ID } from '../store/useTaskStore';
+import { useTaskStore, COMPLETED_LIST_ID, REMOVED_LIST_ID } from '../store/useTaskStore';
 import { TaskList } from '../components/TaskList';
 import { AddTaskModal } from '../components/AddTaskModal';
 import { ListSelector } from '../components/ListSelector';
 import { QuickAdd } from '../components/QuickAdd';
+import { SettingsPane } from '../components/SettingsPane';
 import type { Task } from '../models/Task';
 import './Home.css';
 
@@ -22,15 +23,21 @@ export function Home() {
     toggleTask,
     editTask,
     deleteTask,
+    restoreTask,
+    permanentDeleteTask,
   } = useTaskStore();
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const isCompletedView = activeListId === COMPLETED_LIST_ID;
+  const isRemovedView = activeListId === REMOVED_LIST_ID;
 
-  const filteredTasks = isCompletedView
-    ? tasks.filter((t) => t.completed)
-    : tasks.filter((t) => t.listId === activeListId && !t.completed);
+  const filteredTasks = isRemovedView
+    ? tasks.filter((t) => t.removed)
+    : isCompletedView
+      ? tasks.filter((t) => t.completed && !t.removed)
+      : tasks.filter((t) => t.listId === activeListId && !t.completed && !t.removed);
 
   const listNameById = (id: string) =>
     lists.find((l) => l.id === id)?.name ?? 'Unknown';
@@ -48,59 +55,89 @@ export function Home() {
     }
   };
 
-  const completedCount = tasks.filter((t) => t.completed).length;
+  const completedCount = tasks.filter((t) => t.completed && !t.removed).length;
+  const removedCount = tasks.filter((t) => t.removed).length;
 
   return (
     <div className="home">
       <header className="home-header">
-        <ListSelector
-          lists={lists}
-          activeListId={activeListId}
-          completedCount={completedCount}
-          onSelect={setActiveList}
-          onCreate={addList}
-          onRename={renameList}
-          onDelete={deleteList}
-        />
-        <div className="header-right">
-          <span className="task-count">
-            {isCompletedView
-              ? `${filteredTasks.length} completed`
-              : `${filteredTasks.length} pending`}
-          </span>
-          <div className="menu-wrapper" ref={menuRef}>
-            <button
-              className="menu-btn"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Menu"
-            >
-              ⋮
-            </button>
-            {menuOpen && (
-              <>
-                <div
-                  className="menu-backdrop"
-                  onClick={() => setMenuOpen(false)}
-                />
-                <div className="menu-dropdown">
-                  <p className="menu-empty">No options yet</p>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+        {settingsOpen ? (
+          <button
+            className="back-btn"
+            onClick={() => setSettingsOpen(false)}
+          >
+            ← Settings
+          </button>
+        ) : (
+          <>
+            <ListSelector
+              lists={lists}
+              activeListId={activeListId}
+              completedCount={completedCount}
+              removedCount={removedCount}
+              onSelect={setActiveList}
+              onCreate={addList}
+              onRename={renameList}
+              onDelete={deleteList}
+            />
+            <div className="header-right">
+              <span className="task-count">
+                {isRemovedView
+                  ? `${filteredTasks.length} removed`
+                  : isCompletedView
+                    ? `${filteredTasks.length} completed`
+                    : `${filteredTasks.length} pending`}
+              </span>
+              <div className="menu-wrapper" ref={menuRef}>
+                <button
+                  className="menu-btn"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  aria-label="Menu"
+                >
+                  ⋮
+                </button>
+                {menuOpen && (
+                  <>
+                    <div
+                      className="menu-backdrop"
+                      onClick={() => setMenuOpen(false)}
+                    />
+                    <div className="menu-dropdown">
+                      <button
+                        className="menu-item"
+                        onClick={() => {
+                          setSettingsOpen(true);
+                          setMenuOpen(false);
+                        }}
+                      >
+                        Settings
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </header>
       <main className="home-content">
-        <TaskList
-          tasks={filteredTasks}
-          isCompletedView={isCompletedView}
-          listNameById={listNameById}
-          onToggle={toggleTask}
-          onDelete={deleteTask}
-          onEdit={handleEdit}
-        />
+        {settingsOpen ? (
+          <SettingsPane />
+        ) : (
+          <TaskList
+            tasks={filteredTasks}
+            isCompletedView={isCompletedView}
+            isRemovedView={isRemovedView}
+            listNameById={listNameById}
+            onToggle={toggleTask}
+            onDelete={deleteTask}
+            onRestore={restoreTask}
+            onPermanentDelete={permanentDeleteTask}
+            onEdit={handleEdit}
+          />
+        )}
       </main>
-      {!isCompletedView && (
+      {!isCompletedView && !isRemovedView && !settingsOpen && (
         <>
           <button
             className="fab"

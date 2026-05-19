@@ -81,6 +81,32 @@
   text-align: center;
 }
 
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: #e2e8f0;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-item:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #e2e8f0;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
 .home-content {
   flex: 1;
   overflow-y: auto;

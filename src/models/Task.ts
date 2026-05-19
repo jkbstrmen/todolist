@@ -8,6 +8,7 @@ export interface Task {
   title: string;
   description: string;
   completed: boolean;
+  removed?: boolean;
   dueDate: string | null;
   dueTime: string | null;
   listId: string;

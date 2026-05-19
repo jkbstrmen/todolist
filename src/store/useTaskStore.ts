@@ -18,6 +18,7 @@ const idbStorage = {
 
 const DEFAULT_LIST: TaskList = { id: 'default', name: 'My Tasks' };
 export const COMPLETED_LIST_ID = '__completed__';
+export const REMOVED_LIST_ID = '__removed__';
 
 interface TaskState {
   lists: TaskList[];
@@ -31,6 +32,8 @@ interface TaskState {
   toggleTask: (id: string) => void;
   editTask: (id: string, title: string, description: string, dueDate: string | null, dueTime: string | null) => void;
   deleteTask: (id: string) => void;
+  restoreTask: (id: string) => void;
+  permanentDeleteTask: (id: string) => void;
 }
 
 export const useTaskStore = create<TaskState>()(
@@ -92,6 +95,18 @@ export const useTaskStore = create<TaskState>()(
           ),
         })),
       deleteTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.map((t) =>
+            t.id === id ? { ...t, removed: true } : t
+          ),
+        })),
+      restoreTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.map((t) =>
+            t.id === id ? { ...t, removed: false } : t
+          ),
+        })),
+      permanentDeleteTask: (id) =>
         set((state) => ({
           tasks: state.tasks.filter((t) => t.id !== id),
         })),

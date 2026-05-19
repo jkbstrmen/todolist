@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import type { TaskList } from '../models/Task';
-import { COMPLETED_LIST_ID } from '../store/useTaskStore';
+import { COMPLETED_LIST_ID, REMOVED_LIST_ID } from '../store/useTaskStore';
 import './ListSelector.css';
 
 interface ListSelectorProps {
   lists: TaskList[];
   activeListId: string;
   completedCount: number;
+  removedCount: number;
   onSelect: (id: string) => void;
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
@@ -17,6 +18,7 @@ export function ListSelector({
   lists,
   activeListId,
   completedCount,
+  removedCount,
   onSelect,
   onCreate,
   onRename,
@@ -28,9 +30,12 @@ export function ListSelector({
   const [editingName, setEditingName] = useState('');
 
   const isCompletedView = activeListId === COMPLETED_LIST_ID;
-  const activeName = isCompletedView
-    ? 'Completed'
-    : lists.find((l) => l.id === activeListId)?.name;
+  const isRemovedView = activeListId === REMOVED_LIST_ID;
+  const activeName = isRemovedView
+    ? 'Removed'
+    : isCompletedView
+      ? 'Completed'
+      : lists.find((l) => l.id === activeListId)?.name;
 
   const handleCreate = () => {
     const trimmed = newListName.trim();
@@ -134,6 +139,21 @@ export function ListSelector({
                 ✓ Completed
               </button>
               <span className="completed-badge">{completedCount}</span>
+            </div>
+
+            <div
+              className={`list-option completed-option ${isRemovedView ? 'active' : ''}`}
+            >
+              <button
+                className="list-option-name"
+                onClick={() => {
+                  onSelect(REMOVED_LIST_ID);
+                  setIsOpen(false);
+                }}
+              >
+                ✗ Removed
+              </button>
+              <span className="completed-badge">{removedCount}</span>
             </div>
 
             <div className="list-create">

@@ -1,12 +1,16 @@
 import type { Task } from '../models/Task';
+import { useSettingsStore } from '../store/useSettingsStore';
 import { TaskItem } from './TaskItem';
 
 interface TaskListProps {
   tasks: Task[];
   isCompletedView: boolean;
+  isRemovedView: boolean;
   listNameById: (id: string) => string;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onRestore: (id: string) => void;
+  onPermanentDelete: (id: string) => void;
   onEdit: (task: Task) => void;
 }
 
@@ -26,8 +30,8 @@ const DAY_NAMES = [
   'Saturday',
 ];
 
-function getDateSection(dueDate: string | null): { order: number; label: string } {
-  if (!dueDate) return { order: 100, label: 'No date' };
+function getDateSection(dueDate: string | null, noDateOrder: number): { order: number; label: string } {
+  if (!dueDate) return { order: noDateOrder, label: 'No date' };
 
   const today = startOfDay(new Date());
   const due = startOfDay(new Date(dueDate + 'T00:00:00'));
@@ -74,11 +78,11 @@ function sortTasksInSection(tasks: Task[]): Task[] {
   });
 }
 
-function groupByDate(tasks: Task[]): Section[] {
+function groupByDate(tasks: Task[], noDateOrder: number): Section[] {
   const map = new Map<string, Section>();
 
   for (const task of tasks) {
-    const { order, label } = getDateSection(task.dueDate);
+    const { order, label } = getDateSection(task.dueDate, noDateOrder);
     const existing = map.get(label);
     if (existing) {
       existing.tasks.push(task);
@@ -95,18 +99,46 @@ function groupByDate(tasks: Task[]): Section[] {
 export function TaskList({
   tasks,
   isCompletedView,
+  isRemovedView,
   listNameById,
   onToggle,
   onDelete,
+  onRestore,
+  onPermanentDelete,
   onEdit,
 }: TaskListProps) {
+  const { noDateTasksPosition } = useSettingsStore();
+
   if (tasks.length === 0) {
+    const emptyText = isRemovedView
+      ? 'No removed tasks'
+      : isCompletedView
+        ? 'No completed tasks'
+        : 'No tasks yet';
     return (
       <div className="empty-state">
-        <p>{isCompletedView ? 'No completed tasks' : 'No tasks yet'}</p>
-        {!isCompletedView && (
+        <p>{emptyText}</p>
+        {!isCompletedView && !isRemovedView && (
           <p className="empty-hint">Type below to add your first task</p>
         )}
+      </div>
+    );
+  }
+
+  if (isRemovedView) {
+    return (
+      <div className="task-list">
+        {tasks.map((task) => (
+          <TaskItem
+            key={task.id}
+            task={task}
+            subtitle={listNameById(task.listId)}
+            isRemovedView
+            onToggle={onRestore}
+            onDelete={onPermanentDelete}
+            onEdit={onEdit}
+          />
+        ))}
       </div>
     );
   }
@@ -128,7 +160,8 @@ export function TaskList({
     );
   }
 
-  const sections = groupByDate(tasks);
+  const noDateOrder = noDateTasksPosition === 'beginning' ? -2 : 100;
+  const sections = groupByDate(tasks, noDateOrder);
 
   return (
     <div className="task-list">
