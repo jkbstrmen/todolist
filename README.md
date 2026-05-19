@@ -9,14 +9,52 @@ npm install
 npm run dev
 ```
 
-## Docker deployment
+## Docker Deployment
+
+### Build the image
 
 ```bash
 docker build -t todolist .
-docker run -d -p 8080:80 todolist
+```
+
+### Run locally
+
+```bash
+docker run -d -p 8080:80 --name todolist todolist
 ```
 
 The app will be available at `http://localhost:8080`.
+
+### Stop and remove
+
+```bash
+docker stop todolist
+docker rm todolist
+```
+
+### Deploy to a server
+
+1. Build the image on the server (or push to a registry):
+
+```bash
+# Option A: build directly on the server
+git clone <repo-url> && cd todolist
+docker build -t todolist .
+
+# Option B: use a registry
+docker build -t your-registry.com/todolist:latest .
+docker push your-registry.com/todolist:latest
+# then on the server:
+docker pull your-registry.com/todolist:latest
+```
+
+2. Run with auto-restart:
+
+```bash
+docker run -d -p 80:80 --restart unless-stopped --name todolist todolist
+```
+
+3. For HTTPS, put a reverse proxy (nginx, Caddy, Traefik) in front — PWA install and notifications require HTTPS in production.
 
 ## Build & sync to Android (Capacitor)
 
@@ -30,15 +68,8 @@ npx cap open android
 
 - [ ] **Color labels for lists** — assign colors to task lists for visual distinction
 - [x] **Dark blue theme** — app-wide dark blue color scheme
-- [ ] **Notifications**
-  - [ ] Notify at the set time for tasks with a due time
-  - [ ] Notify at 7:00 AM for all-day tasks
-- [ ] **Settings**
-  - [ ] Configure whether tasks without a date appear at the beginning or end of the list
-  - [ ] Configure whether quick-add creates tasks for today or without a date
-  - [ ] Configure how long before a task's due time to show a notification
-  - [ ] Configure when to display the daily task summary notification
+- [x] **Notifications** — task time reminders and daily morning summary
+- [ ] **Settings UI** — configure notification timing, quick-add behavior, task ordering
 - [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
 - [ ] **Undo on complete** — show a brief undo snackbar after marking a task as completed
-- [ ] **JSON storage on device** — persist data to a local JSON file instead of (or alongside) localStorage
-- [ ] Storage - IndexedDB
+- [x] **IndexedDB storage** — persistent storage via idb-keyval
