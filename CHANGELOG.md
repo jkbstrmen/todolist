@@ -25,3 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Zustand store with localStorage persistence
 - PWA support — installable on mobile and desktop, works offline
 - Docker deployment — multi-stage Dockerfile with nginx for production serving
+- Dark blue theme
+- IndexedDB persistence via idb-keyval (replaces localStorage)
+- Settings store with defaults (persisted to IndexedDB)
+- Notifications — task due time reminders (with configurable lead time) and daily morning summary of today's tasks
