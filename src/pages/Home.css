@@ -167,15 +167,30 @@
   letter-spacing: 0.5px;
 }
 
+.section-header.section-today {
+  color: #7db8f7;
+  background: rgba(96, 165, 250, 0.18);
+  border-left: 3px solid #60a5fa;
+}
+
+.section-group-today .task-item {
+  background: #2a4060;
+}
+
 .section-header.section-overdue {
   color: #f87171;
   background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid #ef4444;
 }
 
 .section-count {
   font-size: 12px;
   font-weight: 500;
   color: #64748b;
+}
+
+.section-today .section-count {
+  color: #60a5fa;
 }
 
 .section-overdue .section-count {

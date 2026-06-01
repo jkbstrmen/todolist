@@ -30,3 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Settings store with defaults (persisted to IndexedDB)
 - Notifications — task due time reminders (with configurable lead time) and daily morning summary of today's tasks
 - Undo snackbar — brief toast with "Undo" button after marking a task as completed (auto-dismisses after 4 seconds)
+- Today section highlight — blue left border and tinted background to distinguish today's tasks
+- 24-hour time format for task times
+- Card-style task rows — rounded corners and card background instead of flat rows
+- Subtler date display — muted outline style instead of bright blue pill

@@ -3,12 +3,14 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border-bottom: 1px solid #273549;
+  margin: 6px 10px;
+  background: #273549;
+  border-radius: 10px;
   transition: background-color 0.15s;
 }
 
 .task-item:active {
-  background-color: #273549;
+  background-color: #2d3f56;
 }
 
 .task-item.completed .task-title {
@@ -74,17 +76,16 @@
 }
 
 .task-date {
-  font-size: 12px;
-  color: #fff;
-  background: #3b82f6;
-  padding: 1px 8px;
-  border-radius: 10px;
+  font-size: 11px;
+  color: #7cacf0;
+  padding: 1px 6px;
+  border: 1px solid #5a8ad0;
+  border-radius: 4px;
 }
 
 .task-time {
-  font-size: 12px;
-  color: #60a5fa;
-  font-weight: 600;
+  font-size: 11px;
+  color: #7cacf0;
 }
 
 .task-item.removed .task-title {

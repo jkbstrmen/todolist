@@ -73,7 +73,7 @@ npx cap open android
 - [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
 - [x] **Undo on complete** — show a brief undo snackbar after marking a task as completed
 - [x] **IndexedDB storage** — persistent storage via idb-keyval
-- [ ] **Highlight today's tasks** — visually distinguish the "Today" section from other date groups
-- [ ] **24h time format** — display task times in 24-hour format
-- [ ] **Subtler date display** — tone down the date pill so it doesn't dominate the task row
-- [ ] **Card-style tasks** — display tasks as cards instead of plain rows
+- [x] **Highlight today's tasks** — visually distinguish the "Today" section from other date groups
+- [x] **24h time format** — display task times in 24-hour format
+- [x] **Subtler date display** — tone down the date pill so it doesn't dominate the task row
+- [x] **Card-style tasks** — display tasks as cards instead of plain rows

@@ -166,9 +166,9 @@ export function TaskList({
   return (
     <div className="task-list">
       {sections.map((section) => (
-        <div key={section.label}>
+        <div key={section.label} className={section.label === 'Today' ? 'section-group-today' : ''}>
           <div
-            className={`section-header ${section.label === 'Overdue' ? 'section-overdue' : ''}`}
+            className={`section-header ${section.label === 'Overdue' ? 'section-overdue' : section.label === 'Today' ? 'section-today' : ''}`}
           >
             {section.label}
             <span className="section-count">{section.tasks.length}</span>

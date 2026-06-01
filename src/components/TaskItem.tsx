@@ -22,11 +22,7 @@ function formatDate(dateStr: string): string {
 }
 
 function formatTime(timeStr: string): string {
-  const [h, m] = timeStr.split(':');
-  const hour = parseInt(h, 10);
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const h12 = hour % 12 || 12;
-  return `${h12}:${m} ${ampm}`;
+  return timeStr;
 }
 
 export function TaskItem({
