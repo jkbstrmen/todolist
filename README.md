@@ -69,11 +69,11 @@ npx cap open android
 - [ ] **Color labels for lists** — assign colors to task lists for visual distinction
 - [x] **Dark blue theme** — app-wide dark blue color scheme
 - [x] **Notifications** — task time reminders and daily morning summary
-- [ ] **Settings UI** — configure notification timing, quick-add behavior, task ordering
+- [x] **Settings UI** — configure notification timing, quick-add behavior, task ordering
 - [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
 - [x] **Undo on complete** — show a brief undo snackbar after marking a task as completed
 - [x] **IndexedDB storage** — persistent storage via idb-keyval
-- vyraznejsie vizualne rozlysit blok dnesnych uloh
-- cas uloh zobrazovat 24h formate
-- menej vyrazne zobrazovat datum - teraz hrozne svieti ako keby bol najdolezitejsi
-- zobrazovanie uloh vo forme kariet
+- [ ] **Highlight today's tasks** — visually distinguish the "Today" section from other date groups
+- [ ] **24h time format** — display task times in 24-hour format
+- [ ] **Subtler date display** — tone down the date pill so it doesn't dominate the task row
+- [ ] **Card-style tasks** — display tasks as cards instead of plain rows
