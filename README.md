@@ -73,3 +73,7 @@ npx cap open android
 - [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
 - [ ] **Undo on complete** — show a brief undo snackbar after marking a task as completed
 - [x] **IndexedDB storage** — persistent storage via idb-keyval
+- vyraznejsie vizualne rozlysit blok dnesnych uloh
+- cas uloh zobrazovat 24h formate
+- menej vyrazne zobrazovat datum - teraz hrozne svieti ako keby bol najdolezitejsi
+- zobrazovanie uloh vo forme kariet
