@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useSettingsStore } from '../store/useSettingsStore';
 import type { Task } from '../models/Task';
@@ -39,7 +39,7 @@ function getTodayStr(): string {
 
 function getTodayTasks(tasks: Task[]): Task[] {
   const today = getTodayStr();
-  return tasks.filter((t) => !t.completed && t.dueDate === today);
+  return tasks.filter((t) => !t.completed && !t.removed && t.dueDate === today);
 }
 
 function checkTaskNotifications(tasks: Task[], leadMinutes: number) {
@@ -47,15 +47,14 @@ function checkTaskNotifications(tasks: Task[], leadMinutes: number) {
   const notified = getNotifiedIds();
 
   for (const task of tasks) {
-    if (task.completed || !task.dueDate || !task.dueTime) continue;
+    if (task.completed || task.removed || !task.dueDate || !task.dueTime) continue;
     if (notified.has(task.id)) continue;
 
     const taskTime = new Date(`${task.dueDate}T${task.dueTime}`).getTime();
     const notifyAt = taskTime - leadMinutes * 60 * 1000;
 
     if (now >= notifyAt && now < taskTime + 60 * 60 * 1000) {
-      const timeLabel = formatTime12(task.dueTime);
-      showNotification(task.title, `Due at ${timeLabel}`);
+      showNotification(task.title, `Due at ${task.dueTime}`);
       markNotified(task.id);
     }
   }
@@ -80,7 +79,7 @@ function checkMorningSummary(tasks: Task[], summaryTime: string) {
 
   const lines = todayTasks
     .map((t) => {
-      const time = t.dueTime ? ` at ${formatTime12(t.dueTime)}` : '';
+      const time = t.dueTime ? ` at ${t.dueTime}` : '';
       return `• ${t.title}${time}`;
     })
     .join('\n');
@@ -92,30 +91,26 @@ function checkMorningSummary(tasks: Task[], summaryTime: string) {
   setLastSummaryDate(today);
 }
 
-function formatTime12(timeStr: string): string {
-  const [h, m] = timeStr.split(':');
-  const hour = parseInt(h, 10);
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const h12 = hour % 12 || 12;
-  return `${h12}:${m} ${ampm}`;
-}
-
 export function useNotifications() {
   const tasks = useTaskStore((s) => s.tasks);
   const leadMinutes = useSettingsStore((s) => s.notificationLeadMinutes);
   const summaryTime = useSettingsStore((s) => s.dailySummaryTime);
   const intervalRef = useRef<number | null>(null);
+  const [permission, setPermission] = useState<NotificationPermission>(
+    'Notification' in window ? Notification.permission : 'denied'
+  );
 
   useEffect(() => {
     if (!('Notification' in window)) return;
     if (Notification.permission === 'default') {
-      Notification.requestPermission();
+      Notification.requestPermission().then((result) => {
+        setPermission(result);
+      });
     }
   }, []);
 
   useEffect(() => {
-    if (!('Notification' in window)) return;
-    if (Notification.permission !== 'granted') return;
+    if (permission !== 'granted') return;
 
     const check = () => {
       checkTaskNotifications(tasks, leadMinutes);
@@ -128,5 +123,5 @@ export function useNotifications() {
     return () => {
       if (intervalRef.current) window.clearInterval(intervalRef.current);
     };
-  }, [tasks, leadMinutes, summaryTime]);
+  }, [tasks, leadMinutes, summaryTime, permission]);
 }
