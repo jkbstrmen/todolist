@@ -28,9 +28,19 @@ function setLastSummaryDate(date: string) {
   localStorage.setItem(SUMMARY_KEY, date);
 }
 
-function showNotification(title: string, body: string) {
+async function showNotification(title: string, body: string) {
   if (Notification.permission !== 'granted') return;
-  new Notification(title, { body, icon: '/pwa-192x192.png' });
+  try {
+    // Use Service Worker notifications (required on mobile)
+    const reg = await navigator.serviceWorker?.ready;
+    if (reg) {
+      await reg.showNotification(title, { body, icon: '/pwa-192x192.png' });
+    } else {
+      new Notification(title, { body, icon: '/pwa-192x192.png' });
+    }
+  } catch {
+    // Notification not supported in this context — ignore silently
+  }
 }
 
 function getTodayStr(): string {
@@ -113,8 +123,12 @@ export function useNotifications() {
     if (permission !== 'granted') return;
 
     const check = () => {
-      checkTaskNotifications(tasks, leadMinutes);
-      checkMorningSummary(tasks, summaryTime);
+      try {
+        checkTaskNotifications(tasks, leadMinutes);
+        checkMorningSummary(tasks, summaryTime);
+      } catch {
+        // Prevent notification errors from crashing the app
+      }
     };
 
     check();
