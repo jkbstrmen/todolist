@@ -206,6 +206,8 @@ export function Home() {
                       >
                         Settings
                       </button>
+                      <div className="menu-divider" />
+                      <span className="menu-version">v{APP_VERSION}</span>
                     </div>
                   </>
                 )}

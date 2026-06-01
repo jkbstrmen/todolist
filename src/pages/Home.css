@@ -103,6 +103,14 @@
   margin: 4px 0;
 }
 
+.menu-version {
+  display: block;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+}
+
 .back-btn {
   background: none;
   border: none;
