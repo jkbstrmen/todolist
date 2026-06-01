@@ -71,7 +71,7 @@ npx cap open android
 - [x] **Notifications** — task time reminders and daily morning summary
 - [ ] **Settings UI** — configure notification timing, quick-add behavior, task ordering
 - [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
-- [ ] **Undo on complete** — show a brief undo snackbar after marking a task as completed
+- [x] **Undo on complete** — show a brief undo snackbar after marking a task as completed
 - [x] **IndexedDB storage** — persistent storage via idb-keyval
 - vyraznejsie vizualne rozlysit blok dnesnych uloh
 - cas uloh zobrazovat 24h formate

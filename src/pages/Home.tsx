@@ -1,10 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useTaskStore, COMPLETED_LIST_ID, REMOVED_LIST_ID } from '../store/useTaskStore';
 import { TaskList } from '../components/TaskList';
 import { AddTaskModal } from '../components/AddTaskModal';
 import { ListSelector } from '../components/ListSelector';
 import { QuickAdd } from '../components/QuickAdd';
 import { SettingsPane } from '../components/SettingsPane';
+import { UndoSnackbar } from '../components/UndoSnackbar';
 import type { Task } from '../models/Task';
 import './Home.css';
 
@@ -29,6 +30,30 @@ export function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [undoTask, setUndoTask] = useState<Task | null>(null);
+  const undoTimerRef = useRef<number | null>(null);
+
+  const handleToggle = useCallback((id: string) => {
+    const task = tasks.find((t) => t.id === id);
+    if (task && !task.completed) {
+      // Completing a task — show undo snackbar
+      setUndoTask(task);
+      if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+    }
+    toggleTask(id);
+  }, [tasks, toggleTask]);
+
+  const handleUndo = useCallback(() => {
+    if (undoTask) {
+      toggleTask(undoTask.id);
+      setUndoTask(null);
+      if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+    }
+  }, [undoTask, toggleTask]);
+
+  const dismissUndo = useCallback(() => {
+    setUndoTask(null);
+  }, []);
 
   const isCompletedView = activeListId === COMPLETED_LIST_ID;
   const isRemovedView = activeListId === REMOVED_LIST_ID;
@@ -129,7 +154,7 @@ export function Home() {
             isCompletedView={isCompletedView}
             isRemovedView={isRemovedView}
             listNameById={listNameById}
-            onToggle={toggleTask}
+            onToggle={handleToggle}
             onDelete={deleteTask}
             onRestore={restoreTask}
             onPermanentDelete={permanentDeleteTask}
@@ -158,6 +183,13 @@ export function Home() {
         onClose={() => setModalOpen(false)}
         onSave={handleSave}
       />
+      {undoTask && (
+        <UndoSnackbar
+          message={`"${undoTask.title}" completed`}
+          onUndo={handleUndo}
+          onDismiss={dismissUndo}
+        />
+      )}
     </div>
   );
 }
