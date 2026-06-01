@@ -29,3 +29,24 @@ android/.gradle
 android/app/build
 android/build
 android/local.properties
+
+# Expo (todo-expo)
+todo-expo/.expo/
+todo-expo/dist/
+todo-expo/web-build/
+todo-expo/expo-env.d.ts
+todo-expo/node_modules/
+todo-expo/.metro-health-check*
+todo-expo/*.tsbuildinfo
+todo-expo/ios/
+todo-expo/android/
+
+# Native build artifacts
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+.kotlin/
