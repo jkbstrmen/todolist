@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { useSettingsStore } from '../store/useSettingsStore';
 import { useTaskStore, COMPLETED_LIST_ID, REMOVED_LIST_ID } from '../store/useTaskStore';
 import { TaskList } from '../components/TaskList';
 import { AddTaskModal } from '../components/AddTaskModal';
@@ -26,7 +27,9 @@ export function Home() {
     deleteTask,
     restoreTask,
     permanentDeleteTask,
+    importData,
   } = useTaskStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -54,6 +57,59 @@ export function Home() {
   const dismissUndo = useCallback(() => {
     setUndoTask(null);
   }, []);
+
+  const handleExport = useCallback(() => {
+    const settings = useSettingsStore.getState();
+    const { noDateTasksPosition, quickAddDate, notificationLeadMinutes, dailySummaryTime } = settings;
+    const data = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      lists,
+      tasks,
+      settings: { noDateTasksPosition, quickAddDate, notificationLeadMinutes, dailySummaryTime },
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `todolist-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setMenuOpen(false);
+  }, [lists, tasks]);
+
+  const handleImport = useCallback(() => {
+    fileInputRef.current?.click();
+    setMenuOpen(false);
+  }, []);
+
+  const handleFileSelected = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result as string);
+        if (!data.lists || !data.tasks) {
+          alert('Invalid file: missing lists or tasks');
+          return;
+        }
+        importData(data.lists, data.tasks);
+        if (data.settings) {
+          const { updateSetting } = useSettingsStore.getState();
+          const s = data.settings;
+          if (s.noDateTasksPosition) updateSetting('noDateTasksPosition', s.noDateTasksPosition);
+          if (s.quickAddDate) updateSetting('quickAddDate', s.quickAddDate);
+          if (s.notificationLeadMinutes != null) updateSetting('notificationLeadMinutes', s.notificationLeadMinutes);
+          if (s.dailySummaryTime) updateSetting('dailySummaryTime', s.dailySummaryTime);
+        }
+      } catch {
+        alert('Failed to parse file');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }, [importData]);
 
   const isCompletedView = activeListId === COMPLETED_LIST_ID;
   const isRemovedView = activeListId === REMOVED_LIST_ID;
@@ -130,6 +186,19 @@ export function Home() {
                     <div className="menu-dropdown">
                       <button
                         className="menu-item"
+                        onClick={handleExport}
+                      >
+                        Export
+                      </button>
+                      <button
+                        className="menu-item"
+                        onClick={handleImport}
+                      >
+                        Import
+                      </button>
+                      <div className="menu-divider" />
+                      <button
+                        className="menu-item"
                         onClick={() => {
                           setSettingsOpen(true);
                           setMenuOpen(false);
@@ -190,6 +259,13 @@ export function Home() {
           onDismiss={dismissUndo}
         />
       )}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json"
+        style={{ display: 'none' }}
+        onChange={handleFileSelected}
+      />
     </div>
   );
 }

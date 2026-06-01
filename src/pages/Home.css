@@ -97,6 +97,12 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
+.menu-divider {
+  height: 1px;
+  background: #3b4a5e;
+  margin: 4px 0;
+}
+
 .back-btn {
   background: none;
   border: none;

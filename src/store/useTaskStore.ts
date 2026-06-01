@@ -34,6 +34,7 @@ interface TaskState {
   deleteTask: (id: string) => void;
   restoreTask: (id: string) => void;
   permanentDeleteTask: (id: string) => void;
+  importData: (lists: TaskList[], tasks: Task[]) => void;
 }
 
 export const useTaskStore = create<TaskState>()(
@@ -110,6 +111,12 @@ export const useTaskStore = create<TaskState>()(
         set((state) => ({
           tasks: state.tasks.filter((t) => t.id !== id),
         })),
+      importData: (lists, tasks) =>
+        set({
+          lists,
+          tasks,
+          activeListId: lists[0]?.id ?? 'default',
+        }),
     }),
     { name: 'todo-storage', storage: createJSONStorage(() => idbStorage) }
   )

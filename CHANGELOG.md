@@ -34,3 +34,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - 24-hour time format for task times
 - Card-style task rows — rounded corners and card background instead of flat rows
 - Subtler date display — muted outline style instead of bright blue pill
+- Export / Import — export all tasks, lists, and settings to a JSON file; import from a JSON file to restore (via ⋮ menu)

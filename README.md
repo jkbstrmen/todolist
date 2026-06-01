@@ -70,7 +70,7 @@ npx cap open android
 - [x] **Dark blue theme** — app-wide dark blue color scheme
 - [x] **Notifications** — task time reminders and daily morning summary
 - [x] **Settings UI** — configure notification timing, quick-add behavior, task ordering
-- [ ] **Export / Import** — export and import tasks to/from a JSON file (via menu)
+- [x] **Export / Import** — export and import tasks to/from a JSON file (via menu)
 - [x] **Undo on complete** — show a brief undo snackbar after marking a task as completed
 - [x] **IndexedDB storage** — persistent storage via idb-keyval
 - [x] **Highlight today's tasks** — visually distinguish the "Today" section from other date groups
